@@ -451,7 +451,7 @@ code{background:var(--cream);padding:1px 5px;border-radius:5px;font-size:12px}
     <div id="ceWhoBox"><label class="f">Dengan siapa / lokasi</label><input type="text" id="ceWho"></div>
   </div>
   <div class="grid2">
-    <div><label class="f">Untuk / PIC</label><select id="cePic"><option value="">—</option><option>Dato</option><option>Datin</option><option>Bos</option><option>Ayuni</option><option>Nurul</option></select></div>
+    <div><label class="f">Untuk / PIC</label><select id="cePic"><option value="">—</option><option>Dato</option><option>Datin</option><option>Puan Amira</option><option>Bos</option><option>Ayuni</option><option>Nurul</option></select></div>
     <div id="ceDoneBox" style="display:none"><label class="f">Status</label><label class="chk"><input type="checkbox" id="ceDone"> Siap</label></div>
   </div>
   <label class="f">Nota</label><textarea id="ceNota" rows="3"></textarea>
@@ -963,8 +963,10 @@ function buildSync(){const box=$("#calSync");const c=calCfg();syncPill=el("span"
   const det=el("details",{style:"margin-bottom:10px;background:var(--white)"},el("summary",{text:"⚙️ Sambungan Google Sheet & nama anda"}));
   const url=el("input",{type:"url",placeholder:"https://script.google.com/macros/s/…/exec"});url.value=c?c.url:"";
   const key=el("input",{type:"text",placeholder:"Kunci (DH-…)"});key.value=c?c.key:"";
-  const nm=el("select",null,...["Dato","Datin","Bos","Ayuni","Nurul"].map(x=>el("option",{text:x})));nm.value=me();nm.onchange=()=>{try{localStorage.setItem("dh_me",nm.value)}catch(e){}toast("Nama disimpan: "+nm.value)};
-  det.append(el("div",{class:"grid3",style:"margin-top:8px"},el("div",null,el("label",{class:"f",text:"Nama anda (untuk 'Ditulis oleh')"}),nm),el("div",null,el("label",{class:"f",text:"URL Web app"}),url),el("div",null,el("label",{class:"f",text:"Kunci"}),key)),
+  const nm=el("input",{type:"text",list:"dhNames",placeholder:"Taip nama anda"});nm.value=me();
+  const dl=el("datalist",{id:"dhNames"},...["Dato","Datin","Puan Amira (PA Dato)","Ayuni","Nurul","Bos"].map(x=>el("option",{value:x})));
+  nm.onchange=()=>{const v=nm.value.trim();if(!v)return;try{localStorage.setItem("dh_me",v)}catch(e){}toast("Nama disimpan: "+v)};
+  det.append(el("div",{class:"grid3",style:"margin-top:8px"},el("div",null,el("label",{class:"f",text:"Nama anda (untuk 'Ditulis oleh')"}),nm,dl),el("div",null,el("label",{class:"f",text:"URL Web app"}),url),el("div",null,el("label",{class:"f",text:"Kunci"}),key)),
     el("div",{class:"acts",style:"margin-top:10px"},
       el("button",{class:"btn gold sm",text:"Simpan & uji sambungan",onclick:async()=>{const u=url.value.trim(),k=key.value.trim();
         if(!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(u)){toast("URL mesti bermula https://script.google.com/macros/s/ dan berakhir /exec",true);return}if(!k){toast("Masukkan kunci",true);return}
